@@ -31,14 +31,10 @@ def setup():
     global p2_pos
 
     size(800, 400)
-
-    global p1_pos
-    global p2_pos
-
     p1_pos.x = random(5, 400)  # (5, 200) states the range
     p1_pos.y = random(5, 400)
-    p2_pos.x = random(795, 400)
-    p2_pos.y = random(795, 400)
+    p2_pos.x = random(400, 800)
+    p2_pos.y = random(0, 400)
 
 def draw():
     global p1_pos
@@ -55,31 +51,67 @@ def draw():
     rect(0, 0, 400, 400)
     # ball
     fill(196, 255, 235)
+    noStroke()
     ellipse(p1_pos.x, p1_pos.y, 50, 50)
     # score
     fill(196, 255, 235)
     textSize(25)
     text("Score: " + str(p1_score), 30, 50)
-
     # Player 2 board
     fill(196, 255, 235)
     rect(width / 2, 0, width, height)
     # ball
     fill(5, 9, 89)
+    noStroke()
     ellipse(p2_pos.x, p2_pos.y, 50, 50)
     # score
     fill(5, 9, 89)
     textSize(25)
-    text("Score: " + str(p2_score), 400, 50)
+    text("Score: " + str(p2_score), 440, 50)
+    
+    #winner
+    if winner:
+        textSize(60)
+        textAlign(CENTER)
+        fill(255)
+        text(winner + " IS THE WINNER!!", width / 2, height / 2)
 
 def mousePressed():
     global p1_pos
     global p2_pos
-    global score
+    global p1_score
+    global p2_score
+    global winner
+    
+    #player 1
+    radius = 50 / 2.0
+    distance_x = abs(mouseX - p1_pos.x)
+    distance_y = abs(mouseY - p1_pos.y)
+    hypotenuse = sqrt(distance_x ** 2 + distance_y ** 2) #sqrt() <= square root, distance_y ^2 + distance_y ^2, a^2 + b^2 = forumla of hypotenuse)
+    if hypotenuse <= radius:
+         p1_pos.x = random(5, 400)  # (5, 200) states the range
+         p1_pos.y = random(5, 400)
+         p1_score += 1
+         
+    #player 2
+    radius = 50 / 2.0
+    distance_x = abs(mouseX - p2_pos.x) #abs() absolute value
+    distance_y = abs(mouseY - p2_pos.y) #mouse y cordinate - player 2 y position yields y-distance
+    hypotenuse = sqrt(distance_x ** 2 + distance_y ** 2) #sqrt() <= square root, distance_y ^2 + distance_y ^2, a^2 + b^2 = forumla of hypotenuse)
+    if hypotenuse <= radius:
+         p2_pos.x = random(400, 800) #lower limit, higher limit)
+         p2_pos.y = random(0, 400)
+         p2_score += 1
+    if winner == None:
+        if p1_score == 10:
+            winner = "Player 1"
+        elif p2_score == 10:
+            winner = "Player 2"
 
-    p1_pos.x = random(5, 400)  # (5, 200) states the range
-    p1_pos.y = random(5, 400)
 
-    p2_pos.x = random(795, 400)
-    p2_pos.y = random(795, 400)
-    score += 1
+    
+#gameno2
+        #make a canvas
+        #falling ellipse and have an ellipse at bottom attached to move(refer to mouse fllow)
+        #move back and forth based on mouse location but fixed to bottom of screen, doging kind of game.
+        #if two ellpise touch then lose 
